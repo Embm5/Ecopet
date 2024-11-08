@@ -1,15 +1,16 @@
+/* eslint-disable camelcase */
 import { Client } from '../models/client.model.js'
 import { Credential } from '../models/credential.model.js'
 import { Person } from '../models/person.model.js'
+import { Veterinary } from '../models/veterinary.model.js'
 import { CredentialController } from './credential.controller.js' // Capitalización corregida
 
 export class ClientController {
   getAllClient = async (req, res) => {
     try {
-      const clients = await Client.findAll({
+      const clients = await Person.findAll({
         include: [{
-          model: Person,
-          include: [{ model: Credential }]
+          model: Credential
         }]
       })
       res.json(clients)
@@ -21,21 +22,27 @@ export class ClientController {
 
   createClient = async (req, res) => {
     try {
-      const { id, firstName, secondName, lastName1, lastName2, email, password } = req.body
-      const doc = id
+      const { IdRol, cedula, Primer_nombre, Segundo_nombre, Primer_Apellido, Segundo_Apellido, email, password } = req.body
+      const doc = cedula
       const person = await Person.findByPk(doc)
       const cred = await Credential.findOne({ where: { email } })
       if (!person && !cred) {
         const newPerson = await Person.create({
-          id: doc,
-          firstName,
-          secondName,
-          lastName1,
-          lastName2
+          cedula,
+          Primer_nombre,
+          Segundo_nombre,
+          Primer_Apellido,
+          Segundo_Apellido,
+          IdRol
+
         })
-        const credentialController = new CredentialController() 
-        await credentialController.createCredential({ personId: doc, email, password })
-        await Client.create({ personId: doc })
+        const credentialController = new CredentialController()
+        await credentialController.createCredential({ cedula, email, password })
+        if (IdRol === 4) {
+          await Client.create({ cedula })
+        } else {
+          await Veterinary.create({ cedula })
+        }
         return res.status(201).json({ newPerson })
       }
       return res.status(400).json({ message: 'Account already exists' })
@@ -52,7 +59,7 @@ export class ClientController {
       if (client) {
         res.json(client)
       } else {
-        res.status(404).json({ err: 'Administrative client not found' })
+        res.status(404).json({ err: 'person not found' })
       }
     } catch (error) {
       return res.status(500).json({ mesaage: error.message })
@@ -61,10 +68,10 @@ export class ClientController {
 
   deleteClient = async (req, res) => {
     try {
-      const { id } = req.params
+      const { cedula } = req.params
       await Person.destroy({
         where: {
-          id
+          cedula
         }
       })
       res.json({ msg: 'client deleted' })

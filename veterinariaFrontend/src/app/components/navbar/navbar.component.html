@@ -1,0 +1,47 @@
+<div class="header">
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn"> <fa-icon [icon]="barra"></fa-icon> </label>
+        <div id="rol">
+            <img src="../../../assets/logo2.png" alt="logo" id="logo">
+            @switch (rol) {
+            @case ('1') {
+            <h2>Administrator</h2>
+            }
+            @case ('2') {
+            <h2>Veterinarian</h2>
+            }
+            @case ('4') {
+            <h2>Owner</h2>
+            }
+            @default {
+            <h2>EcoPet</h2>
+            }
+            }
+        </div>
+        <ul class="nav-links">
+
+            <li><a routerLink="">Home</a></li>
+            @if (rol == '1') {
+            <li><a routerLink="/persona">Manage People</a></li>
+            }
+            @if (rol == '1' || rol == '2') {
+            <li><a routerLink="/mascota">Manage Pets</a></li>
+            }
+            @if (rol == '4') {
+            <li><a routerLink="/dueño">Request Appointment</a></li>
+            }
+
+            <li><a routerLink="/about">About Us</a></li>
+
+
+            @if (!loginStatus) {
+            <a id="log" class="btn-login" routerLink="/login">Log In</a>
+            }
+            @else {
+            <button class="btn-login" id="close" (click)="logOut()">Log Out</button>
+            }
+        </ul>
+        <div></div>
+    </nav>
+</div>

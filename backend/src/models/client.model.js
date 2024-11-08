@@ -3,18 +3,18 @@ import { sequelize } from '../database/connection.js'
 import { Person } from './person.model.js'
 
 export const Client = sequelize.define('Client', {
-  personId: {
+  cedula: {
     type: DataTypes.BIGINT,
     primaryKey: true
   }
 })
 
 Person.hasOne(Client, {
-  foreignKey: 'personId',
-  sourceKey: 'id'
+  foreignKey: 'cedula',
+  sourceKey: 'cedula'
 })
 
 Client.belongsTo(Person, {
-  foreignKey: 'personId',
-  targetKey: 'id'
+  foreignKey: 'cedula',
+  targetKey: 'cedula'
 })

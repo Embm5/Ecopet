@@ -2,38 +2,42 @@ import { DataTypes } from 'sequelize'
 import { sequelize } from '../database/connection.js'
 
 export const Person = sequelize.define('Person', {
-  id: {
+  cedula: {
     type: DataTypes.BIGINT,
     primaryKey: true,
     validate: {
       isNumeric: true
     }
   },
-  firstName: {
+  Primer_nombre: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
       is: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/i
     }
   },
-  secondName: {
+  Segundo_nombre: {
     type: DataTypes.STRING,
     validate: {
       is: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]*$/i
     }
   },
 
-  lastName1: {
+  Primer_Apellido: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
       is: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/i
     }
   },
-  lastName2: {
+  Segundo_Apellido: {
     type: DataTypes.STRING,
     validate: {
       is: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/i
     }
+  },
+  IdRol: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
 })

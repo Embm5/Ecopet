@@ -33,7 +33,7 @@ export class VeterinaryController {
           lastName1,
           lastName2
         })
-        const credentialController = new CredentialController() 
+        const credentialController = new CredentialController()
         await credentialController.createCredential({ personId: doc, email, password })
         await Veterinary.create({ personId: doc })
         return res.status(201).json({ newPerson })

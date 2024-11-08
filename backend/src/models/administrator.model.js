@@ -3,18 +3,18 @@ import { sequelize } from '../database/connection.js'
 import { Person } from './person.model.js'
 
 export const Administrator = sequelize.define('Administrator', {
-  personId: {
+  cedula: {
     type: DataTypes.BIGINT,
     primaryKey: true
   }
 })
 
 Person.hasOne(Administrator, {
-  foreignKey: 'personId',
-  sourceKey: 'id'
+  foreignKey: 'cedula',
+  sourceKey: 'cedula'
 })
 
 Administrator.belongsTo(Person, {
-  foreignKey: 'personId',
-  targetKey: 'id'
+  foreignKey: 'cedula',
+  targetKey: 'cedula'
 })

@@ -20,10 +20,10 @@ export class CredentialController {
     }
   }
 
-  createCredential = async ({ personId, email, password }) => {
+  createCredential = async ({ cedula, email, password }) => {
     try {
       const cryptedPassword = await bcrypt.hash(password, 12)
-      const newCred = await Credential.create({ personId, email, password: cryptedPassword })
+      const newCred = await Credential.create({ cedula, email, password: cryptedPassword })
       return newCred
     } catch (error) {
       return { message: error.message }
@@ -32,8 +32,8 @@ export class CredentialController {
 
   getCredential = async (req, res) => {
     try {
-      const { id } = req.params
-      const cred = await Credential.findByPk(id)
+      const { cedula } = req.params
+      const cred = await Credential.findByPk(cedula)
       if (cred) {
         res.json(cred)
       } else {
@@ -56,7 +56,7 @@ export class CredentialController {
         return res.status(404).json({ err: 'Email is not registered' })
       }
 
-      const rol = await getRol({ id: cred.personId })
+      const rol = await getRol({ cedula: cred.cedula })
       if (rol !== 'client') {
         return res.status(401).json({ err: 'Permissions denied' })
       }
@@ -86,10 +86,10 @@ export class CredentialController {
 
   deleteCredential = async (req, res) => {
     try {
-      const { id } = req.params
+      const { cedula } = req.params
       await Person.destroy({
         where: {
-          id
+          cedula
         }
       })
       res.json({ msg: 'Credential deleted' })
@@ -100,9 +100,9 @@ export class CredentialController {
 
   updateCredential = async (req, res) => {
     try {
-      const { id } = req.params
+      const { cedula } = req.params
       const { email, password } = req.body
-      const cred = await Credential.findByPk(id)
+      const cred = await Credential.findByPk(cedula)
       if (cred) {
         if (email) {
           cred.email = email
@@ -131,7 +131,7 @@ export class CredentialController {
       if (eq) {
         return res.status(200).json({ msg: 'The password is the same as the currently stored password. No changes have been made.' })
       }
-      const rol = await getRol({ id: cred.personId })
+      const rol = await getRol({ cedula: cred.cedula })
       if (rol !== 'client') {
         return res.status(401).json({ err: 'Permissions denied' })
       }
@@ -160,26 +160,26 @@ export class CredentialController {
       if (!eq) {
         return res.status(401).json({ err: 'Password incorrect' })
       }
-      const rol = await getRol({ id: cred.personId })
-      const token = createToken({ data: { email: cred.email, rol, id: cred.personId } })
+      const rol = await getRol({ cedula: cred.cedula })
+      const token = createToken({ data: { email: cred.email, rol, cedula: cred.cedula } })
       return res.json({ token, rol })
     } catch (error) {
       return res.status(500).json({ mesaage: error.message })
     }
   }
 }
-async function getRol ({ id }) {
-  const admin = await Administrator.findByPk(id)
+async function getRol ({ cedula }) {
+  const admin = await Administrator.findByPk(cedula)
   if (admin) {
-    return 'administrator'
+    return 1
   }
-  const client = await Client.findByPk(id)
+  const client = await Client.findByPk(cedula)
   if (client) {
-    return 'client'
+    return 4
   }
-  const veterinary = await Veterinary.findByPk(id)
+  const veterinary = await Veterinary.findByPk(cedula)
   if (veterinary) {
-    return 'veterinary'
+    return 2
   }
 }
 
@@ -187,7 +187,7 @@ function createToken ({ data }) {
   const payLoad = {
     email: data.email,
     rol: data.rol,
-    id: data.id
+    cedula: data.cedula
   }
   return jwt.sign(payLoad, process.env.SECRET_KEY)
 }

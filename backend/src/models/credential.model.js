@@ -3,7 +3,7 @@ import { sequelize } from '../database/connection.js'
 import { Person } from './person.model.js'
 
 export const Credential = sequelize.define('Credential', {
-  personId: {
+  cedula: {
     type: DataTypes.BIGINT,
     primaryKey: true
   },
@@ -22,11 +22,11 @@ export const Credential = sequelize.define('Credential', {
 })
 
 Person.hasOne(Credential, {
-  foreignKey: 'personId',
-  sourceKey: 'id'
+  foreignKey: 'cedula',
+  sourceKey: 'cedula'
 })
 
 Credential.belongsTo(Person, {
-  foreignKey: 'personId',
-  targetKey: 'id'
+  foreignKey: 'cedula',
+  targetKey: 'cedula'
 })

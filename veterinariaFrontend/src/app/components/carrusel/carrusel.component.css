@@ -1,0 +1,53 @@
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 40vh; /* Reducir la altura del carrusel */
+    max-height: 500px; /* Limitar la altura máxima en pantallas grandes */
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    overflow: hidden; /* Ocultar cualquier parte de la imagen que salga del contenedor */
+    border-radius: 10px; /* Añadir bordes redondeados para una apariencia más amigable */
+}
+
+#imagen {
+    width: 100%;
+    height: 100%;
+    background-size: contain; /* Ajuste para que la imagen mantenga su proporción */
+    background-position: center; /* Centrar la imagen */
+    background-repeat: no-repeat; /* Evitar que la imagen se repita */
+    transition: background-image 0.5s ease-in-out; /* Animación suave en el cambio de imagen */
+}
+
+.btnc {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: rgba(58, 58, 58, 0.7); /* Ajustar opacidad para mejor visibilidad */
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnc:hover {
+    background-color: #3a3a3a;
+}
+
+#retroceder {
+    left: 10px; /* Ajustar margen izquierdo */
+}
+
+#avanzar {
+    right: 10px; /* Ajustar margen derecho */
+}
+
+@media (max-width: 1000px) {
+    .carousel {
+        height: 200px; /* Reducir aún más en pantallas pequeñas */
+    }
+}

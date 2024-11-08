@@ -1,0 +1,215 @@
+<app-navbar></app-navbar>
+<main>
+    @if (switchCredenciales) {
+    <app-credenciales></app-credenciales>
+    }
+    <div class="menu">
+        @if (!buscar) {
+        <button class="btn" (click)="Buscar()"><fa-icon [icon]="lupa"></fa-icon> Search</button>
+        }
+        <button class="btn" (click)="mostrarForm(0)" id="add"><fa-icon [icon]="faPlus"></fa-icon> Add
+            Person</button>
+
+    </div>
+    <div>
+        @if (buscar) {
+        <section class="busqueda">
+            <form action="" id="form-buscar">
+                <input [(ngModel)]="filtrarCed" name="ced" type="number" class="params"
+                    placeholder="Ingrese la cedula del dueño">
+                <button (click)="filtrarPersona()" class="btn" type="button"><fa-icon [icon]="lupa"></fa-icon>
+                    search</button>
+                <button (click)="getPersonas()" (click)="buscar=false" class="btn" id="cerrarBuscar" type="button">
+                    <fa-icon [icon]="cerrar"></fa-icon> Close Search</button>
+            </form>
+        </section>
+        }
+    </div>
+
+    @if (filtrado) {
+    <div class="separador">
+        <section class="acciones">
+            @switch (listPerson[0].IdRol) {
+            @case (1) {
+            <h2 id="titulo">Administrator</h2>
+            }
+            @case (2) {
+            <h2 id="titulo">Veterinarian</h2>
+            }
+            @case (4) {
+            <h2 id="titulo">Owner</h2>
+            }
+            @default {
+            }
+            }
+        </section>
+        <section class="contenido">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Second Name</th>
+                        <th>Last Name</th>
+                        <th>Second Last Name</th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of listAdmin; track item.cedula) {
+                    <tr>
+                        <td>{{item.cedula}}</td>
+                        <td>{{item.Primer_nombre}}</td>
+                        <td>{{item.Segundo_nombre}}</td>
+                        <td>{{item.Primer_Apellido}}</td>
+                        <td>{{item.Segundo_Apellido}}</td>
+
+                        <td class="btns">
+                            <button class="Edit" (click)="mostrarForm(item.cedula!)">
+                                <fa-icon [icon]="faPenToSquare"></fa-icon> Edit
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </div>
+    } @else {
+    <div class="separador">
+        <section class="acciones">
+            <h2 id="titulo">Admins</h2>
+        </section>
+        @if (listAdmin.length !== 0) {
+        <section class="contenido">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Second Name</th>
+                        <th>Last Name</th>
+                        <th>Second Last Name</th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of listAdmin; track item.cedula) {
+                    <tr>
+                        <td>{{item.cedula}}</td>
+                        <td>{{item.Primer_nombre}}</td>
+                        <td>{{item.Segundo_nombre}}</td>
+                        <td>{{item.Primer_Apellido}}</td>
+                        <td>{{item.Segundo_Apellido}}</td>
+
+                        <td class="btns">
+                            <button class="Edit" (click)="mostrarForm(item.cedula!)">
+                                <fa-icon [icon]="faPenToSquare"></fa-icon> Edit
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+        }@else {
+        <h3>No Administrators registered</h3>
+        }
+    </div>
+
+    <div class="separador">
+        <section class="acciones">
+            <h2 id="titulo">Veterinarians</h2>
+        </section>
+        @if (listVeterinario.length !== 0) {
+        <section class="contenido">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Second Name</th>
+                        <th>Last Name</th>
+                        <th>Second Last Name</th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of listVeterinario; track item.cedula) {
+                    <tr>
+                        <td>{{item.cedula}}</td>
+                        <td>{{item.Primer_nombre}}</td>
+                        <td>{{item.Segundo_nombre}}</td>
+                        <td>{{item.Primer_Apellido}}</td>
+                        <td>{{item.Segundo_Apellido}}</td>
+
+                        <td class="btns">
+                            <button class="Edit" (click)="mostrarForm(item.cedula!)">
+                                <fa-icon [icon]="faPenToSquare"></fa-icon> Edit
+                            </button>
+                            <button (click)="eliminarPersona(item.cedula, item.Primer_Apellido)" class="Delete">
+                                <fa-icon [icon]="faTrash"></fa-icon> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+        }@else {
+        <h3>No Veterinarians Registered</h3>
+        }
+    </div>
+
+
+    <div class="separador">
+        <section class="acciones">
+            <h2 id="titulo">Pets owners</h2>
+        </section>
+        @if (listDuenio.length !== 0) {
+        <section class="contenido">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Second Name</th>
+                        <th>Last Name</th>
+                        <th>Second Last Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of listDuenio; track item.cedula) {
+                    <tr>
+                        <td>{{item.cedula}}</td>
+                        <td>{{item.Primer_nombre}}</td>
+                        <td>{{item.Segundo_nombre}}</td>
+                        <td>{{item.Primer_Apellido}}</td>
+                        <td>{{item.Segundo_Apellido}}</td>
+
+                        <td class="btns">
+                            <button class="Edit" (click)="mostrarForm(item.cedula!)">
+                                <fa-icon [icon]="faPenToSquare"></fa-icon> Edit
+                            </button>
+                            <button (click)="eliminarPersona(item.cedula, item.Primer_Apellido)" class="Delete">
+                                <fa-icon [icon]="faTrash"></fa-icon> Delete
+                            </button>>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+        }@else {
+        <h3>No pets owners registered</h3>
+        }
+    </div>
+    }
+
+</main>
+
+<app-footer></app-footer>
