@@ -18,18 +18,18 @@ export class PetController {
 
   createPet = async (req, res) => {
     try {
-      const { nombre, edad, especie, raza, color, tamanio, peso, personId } = req.body
-      const client = await Client.findByPk(personId)
+      const { Nombre, Edad, Especie, Raza, Color, Tamanio, Peso, personId: cedula } = req.body
+      const client = await Client.findByPk(cedula)
       if (client) {
         const newPet = await Pet.create({
-          nombre,
-          edad,
-          especie,
-          raza,
-          color,
-          tamanio,
-          peso,
-          personId
+          Nombre,
+          Edad,
+          Especie,
+          Raza,
+          Color,
+          Tamanio,
+          Peso,
+          cedula
         })
         return res.status(201).json(newPet)
       }
@@ -76,6 +76,21 @@ export class PetController {
         pet.set(req.body)
         await pet.save()
         res.status(202).json(pet)
+      } else {
+        res.status(404).json({ message: 'Pet not found' })
+      }
+    } catch (error) {
+      return res.status(500).json({ message: error.message })
+    }
+  }
+  getPetByOwnerId  = async (req, res) => {
+    try {
+      const { ownerId } = req.params
+      const pet = await Pet.findAll({where: { cedula: ownerId} , 
+        include: [{ model: Client }]
+      })
+      if (pet) {
+        res.json(pet)
       } else {
         res.status(404).json({ message: 'Pet not found' })
       }

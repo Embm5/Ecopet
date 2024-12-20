@@ -34,21 +34,29 @@ export class FormularioPersonaComponent {
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required, Validators.pattern(this.passwordRegex)])
   })
+  form2 = new FormGroup({
+    cedula: new FormControl('', [Validators.required, Validators.pattern(this.cedRegex)]),
+    Primer_nombre: new FormControl('', [Validators.required, Validators.pattern(this.textRegex)]),
+    Segundo_nombre: new FormControl('', [Validators.required, Validators.pattern(this.textRegex)]),
+    Primer_Apellido: new FormControl('', [Validators.required, Validators.pattern(this.textRegex)]),
+    Segundo_Apellido: new FormControl('', [Validators.required, Validators.pattern(this.textRegex)]),
+  })
 
-  id: number
-  operacion: string = 'Agregar '
+
+  id: string = ''
+  operacion: string = 'Create '
   rolSeleccionado: string = ''
   isEditable = true
   private router: Router = inject(Router)
 
   constructor(private _personaService: PersonaService, private aRouter: ActivatedRoute, private toastr: ToastrService) {
-    this.id = Number(aRouter.snapshot.paramMap.get('id'))!
-    // console.log(this.id)
+    this.id = aRouter.snapshot.paramMap.get('id')!
+
   }
 
   ngOnInit(): void {
-    if (this.id != 0) {
-      this.operacion = 'Editar '
+    if (this.id !== '') {
+      this.operacion = 'Edit '
       this.isEditable = false
       this.getPersona(this.id)
     } else {
@@ -57,37 +65,40 @@ export class FormularioPersonaComponent {
   }
 
   CUPersona() {
-    // console.log(this.form)
-    // console.log(this.rolSeleccionado)
-    const persona: Persona = {
-      cedula: Number(this.form.value.cedula!),
-      Primer_nombre: this.form.value.Primer_nombre!,
-      Segundo_nombre: this.form.value.Segundo_nombre!,
-      Primer_Apellido: this.form.value.Primer_Apellido!,
-      Segundo_Apellido: this.form.value.Segundo_Apellido!,
-      email: (this.form.value.email!),
-      password: (this.form.value.password!),
-      IdRol: Number(this.rolSeleccionado),
+    if (this.id !== '') { //editar
+      const persona: Persona = {
+        cedula: this.form2.value.cedula!,
+        Primer_nombre: this.form2.value.Primer_nombre!,
+        Segundo_nombre: this.form2.value.Segundo_nombre!,
+        Primer_Apellido: this.form2.value.Primer_Apellido!,
+        Segundo_Apellido: this.form2.value.Segundo_Apellido!,
+        IdRol: Number(this.rolSeleccionado),
 
-    }
-
-    // console.log("per.rol: " + persona.IdRol)
-
-    if (this.id != 0) { //editar
+      }
       persona.cedula = this.id
       this._personaService.updatePersona(this.id, persona).subscribe({
         next: () => {
-          console.log('Persona agregada')
+
           this.volver()
-          this.toastr.info(`Persona ${persona.Primer_Apellido} Actualizada Con Exito!`, 'Persona Actualizada')
+          this.toastr.info(`Persona ${persona.Primer_Apellido} Update!`, 'Updated person')
         }, error: (e: HttpErrorResponse) => {
-          this.toastr.error(`No se pudo Actualizar la Persona: Asegurese de ingresar los datos Adecuadamente`, 'Error Actualizando Persona')
+          this.toastr.error(`Could not update Person: Make sure you enter the data correctly`, 'Error updating Person')
         }
       })
     } else {  //crear
+      const persona: Persona = {
+        cedula: Number(this.form.value.cedula!),
+        Primer_nombre: this.form.value.Primer_nombre!,
+        Segundo_nombre: this.form.value.Segundo_nombre!,
+        Primer_Apellido: this.form.value.Primer_Apellido!,
+        Segundo_Apellido: this.form.value.Segundo_Apellido!,
+        email: (this.form.value.email!),
+        password: (this.form.value.password!),
+        IdRol: Number(this.rolSeleccionado),
+      }
       this._personaService.agregar(persona).subscribe({
         next: () => {
-          // console.log('Persona agregada')
+
           this.volver()
           this.toastr.success(`Person ${persona.Primer_Apellido} Created Successfully!`, 'Person Created')
         }, error: (e: HttpErrorResponse) => {
@@ -97,19 +108,30 @@ export class FormularioPersonaComponent {
     }
   }
 
-  getPersona(id: number) {
-    this._personaService.getById(id).subscribe((res: Persona[]) => {
-      const data = res[0]
-      // console.log(data)
-      this.form.setValue({
-        cedula: String(data.cedula),
-        Primer_nombre: data.Primer_nombre,
-        Segundo_nombre: data.Segundo_nombre,
-        Primer_Apellido: data.Primer_Apellido,
-        Segundo_Apellido: data.Segundo_Apellido,
-        email: data.email,
-        password: data.password,
-      })
+  getPersona(cedula: string) {
+    this._personaService.getById(cedula).subscribe((data: Persona) => {
+      if (this.operacion === 'Create ') {
+        this.form.setValue({
+          cedula: String(data.cedula),
+          Primer_nombre: data.Primer_nombre,
+          Segundo_nombre: data.Segundo_nombre,
+          Primer_Apellido: data.Primer_Apellido,
+          Segundo_Apellido: data.Segundo_Apellido,
+          email: data.email!,
+          password: data.password!,
+        })
+      } else {
+        (data)
+        this.form2.setValue({
+          cedula: String(data.cedula),
+          Primer_nombre: data.Primer_nombre,
+          Segundo_nombre: data.Segundo_nombre,
+          Primer_Apellido: data.Primer_Apellido,
+          Segundo_Apellido: data.Segundo_Apellido
+        })
+        this.rolSeleccionado = String(data.IdRol)
+
+      }
     })
   }
 
@@ -120,6 +142,7 @@ export class FormularioPersonaComponent {
   capturarRol(event: Event): void {
     const valorSeleccionado = (event.target as HTMLSelectElement).value;
     this.rolSeleccionado = valorSeleccionado
-    //console.log(valorSeleccionado);
+
+
   }
 }

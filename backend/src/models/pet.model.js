@@ -7,31 +7,31 @@ export const Pet = sequelize.define('Pet', {
     primaryKey: true,
     autoIncrement: true
   },
-  nombre: {
+  Nombre: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  edad: {
+  Edad: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  especie: {
+  Especie: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  raza: {
+  Raza: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  color: {
+  Color: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  tamanio: {
+  Tamanio: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  peso: {
+  Peso: {
     type: DataTypes.FLOAT,
     allowNull: false
   },

@@ -6,6 +6,7 @@ import { veterinaryRouters } from './routes/veterinary.routes.js'
 import { credentialRouters } from './routes/credential.routes.js'
 import { petRouters } from './routes/pet.routes.js'
 
+
 export const app = express()
 
 app.use(cors())
@@ -15,3 +16,4 @@ app.use(clientRouters)
 app.use(veterinaryRouters)
 app.use(credentialRouters)
 app.use(petRouters)
+// app.use(citaRouters)

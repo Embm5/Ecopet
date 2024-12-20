@@ -20,19 +20,19 @@ export class PersonaService {
     return this.http.get<Persona[] | msg>(`${this.myAppUrl}${this.myApiUrl}/`)
   }
 
-  getById(cedula: number): Observable<Persona[]> {
-    return this.http.get<Persona[]>(`${this.myAppUrl}${this.myApiUrl}/${cedula}`)
+  getById(cedula: string): Observable<Persona> {
+    return this.http.get<Persona>(`${this.myAppUrl}${this.myApiUrl}/${cedula}`)
   }
 
-  updatePersona(id: number, Persona: Persona): Observable<void> {
-    return this.http.patch<void>(`${this.myAppUrl}${this.myApiUrl}/${id}`, Persona)
+  updatePersona(id: string, Persona: Persona): Observable<void> {
+    return this.http.put<void>(`${this.myAppUrl}${this.myApiUrl}/${id}`, Persona)
   }
 
   agregar(Persona: Persona): Observable<Persona[]> {
     return this.http.post<Persona[]>(`${this.myAppUrl}${this.myApiUrl}/`, Persona)
   }
 
-  deletePerson(cedula: number): Observable<void> {
+  deletePerson(cedula: string): Observable<void> {
     return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}/${cedula}`)
   }
 }

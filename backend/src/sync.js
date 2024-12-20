@@ -5,6 +5,7 @@ import './models/credential.model.js'
 import './models/person.model.js'
 import './models/veterinary.model.js'
 import './models/pet.model.js'
+// import './models/cita.model.js'
 import { inserts } from './models/insert.js'
 
 try {

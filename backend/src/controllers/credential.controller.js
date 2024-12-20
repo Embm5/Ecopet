@@ -162,7 +162,7 @@ export class CredentialController {
       }
       const rol = await getRol({ cedula: cred.cedula })
       const token = createToken({ data: { email: cred.email, rol, cedula: cred.cedula } })
-      return res.json({ token, rol })
+      return res.json({ token, rol , cedula: cred.cedula })
     } catch (error) {
       return res.status(500).json({ mesaage: error.message })
     }

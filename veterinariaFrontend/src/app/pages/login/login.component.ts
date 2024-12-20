@@ -29,6 +29,7 @@ export class LoginComponent {
         next: (data) => {
           localStorage.setItem('token', data.token)
           localStorage.setItem('rol', data.rol)
+          localStorage.setItem('cedula', data.cedula)
           console.log(data)
           this.router.navigate([''])
         },

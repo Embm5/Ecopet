@@ -5,7 +5,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash, faPenToSquare, faPlus, faMagnifyingGlass, faSyringe, faFileMedical, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { MascotaService } from '../../services/mascota.service';
-import { Pet } from '../../interfaces/pet';
+import { Pet2 } from '../../interfaces/pet';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
@@ -26,11 +26,30 @@ export class MascotaComponent {
   vacuna = faSyringe
   clinico = faFileMedical
   cerrar = faXmark
-  listPets: Pet[] = []
+  listPets: Pet2[] = []
+  role: string = ''
+  personId: string = ''
   private router: Router = inject(Router)
 
   constructor(private _petService: MascotaService, private toastr: ToastrService) {
-    this.getMascotas()
+    this.role = localStorage.getItem('rol')!
+    this.personId = localStorage.getItem('cedula')!
+    if (this.role === '4') {
+      this.getMascotasByOwnerId(this.personId)
+    } else {
+      this.getMascotas()
+    }
+
+  }
+  getMascotasByOwnerId(cedula: string) {
+    this._petService.getByOwnerId(cedula).subscribe((data) => {
+      if (Array.isArray(data)) {
+        this.listPets = data.reverse()
+      } else {
+        this.listPets = []
+      }
+    })
+
   }
 
 
@@ -44,15 +63,16 @@ export class MascotaComponent {
     })
   }
 
+
   Buscar() {
     this.buscar = true
   }
 
-  mostrarForm(id: string) {
+  mostrarForm(id: number) {
     this.router.navigate([`mascota/formulario/${id}`])
   }
 
-  eliminarMascota(id: string, Nombre: string) {
+  eliminarMascota(id: number, Nombre: string) {
     this._petService.deletePet(id).subscribe(() => {
       this.getMascotas()
       this.toastr.warning(`Mascota ${Nombre} Eliminada con Exito!`, 'Mascota Eliminada')
@@ -62,13 +82,13 @@ export class MascotaComponent {
   filtarNombre: string = ''
   filtarCed: string = ''
   filtrarMascota(): void {
-    const filteredListPet: Pet[] = []
+    const filteredListPet: Pet2[] = []
     if (this.filtarCed === '' && this.filtarNombre === '') {
       this.getMascotas()
     }
     if (this.filtarCed !== '' && this.filtarNombre === '') {
       this.listPets.forEach(item => {
-        if (String(item.personId) == this.filtarCed) {
+        if (String(item.Client.cedula) == this.filtarCed) {
           filteredListPet.push(item)
         }
       });
@@ -84,7 +104,7 @@ export class MascotaComponent {
     }
     if (this.filtarCed !== '' && this.filtarNombre !== '') {
       this.listPets.forEach(item => {
-        if (item.Nombre == this.filtarNombre && String(item.personId) == this.filtarCed) {
+        if (item.Nombre == this.filtarNombre && String(item.Client.cedula) == this.filtarCed) {
           filteredListPet.push(item)
         }
       });

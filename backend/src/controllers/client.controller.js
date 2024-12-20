@@ -54,8 +54,8 @@ export class ClientController {
 
   getClient = async (req, res) => {
     try {
-      const { id } = req.params
-      const client = await Person.findByPk(id)
+      const { cedula } = req.params
+      const client = await Person.findByPk(cedula)
       if (client) {
         res.json(client)
       } else {
@@ -82,10 +82,9 @@ export class ClientController {
 
   updateClient = async (req, res) => {
     try {
-      const { id } = req.params
-      const client = await Person.findByPk(id)
+      const { cedula } = req.params
+      const client = await Person.findByPk(cedula)
       client.set(req.body)
-
       await client.save()
       res.status(202).json(client)
     } catch (error) {

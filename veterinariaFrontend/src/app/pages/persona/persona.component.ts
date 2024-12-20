@@ -77,9 +77,9 @@ export class PersonaComponent {
     })
   }
 
-  eliminarPersona(cedula: number, Nombre: string) {
+  eliminarPersona(cedula: number | string, Nombre: string) {
     console.log(cedula)
-    this._personService.deletePerson(cedula).subscribe(() => {
+    this._personService.deletePerson(String(cedula)).subscribe(() => {
       this.getPersonas()
       this.toastr.warning(`Persona ${Nombre} Eliminada con Exito!`, 'Persona Eliminada')
     })
@@ -89,7 +89,7 @@ export class PersonaComponent {
     this.buscar = true
   }
 
-  mostrarForm(cedula: number) {
+  mostrarForm(cedula: number | string) {
     this.router.navigate([`persona/formulario/${cedula}`])
   }
 

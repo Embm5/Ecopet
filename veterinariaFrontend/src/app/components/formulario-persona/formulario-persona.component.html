@@ -1,8 +1,8 @@
 <section>
     <article>
         <div class="from-container">
-            <!-- <h1>{{operacion}} Person</h1> -->
-            <h1>Create Person</h1>
+            <h1>{{operacion}} Person</h1>
+            @if (operacion === 'Create ') {
             <form [formGroup]="form" id="form" action="/login" method="post" (ngSubmit)="CUPersona()">
                 <div class="inputs">
                     <div class="group">
@@ -42,7 +42,6 @@
                         form.get('Segundo_Apellido')?.touched) {
                         <span>*Required field*</span>
                         }
-
                         <label for="email" class="form-input">email:</label>
 
                         <input formControlName="email" type="email" id="email" class="form-input"
@@ -57,12 +56,15 @@
                         @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
                         <span>*Required field*</span>
                         }
+
+
+
                         <label for="rol" class="form-input">Role:</label>
                         <select [(ngModel)]="rolSeleccionado" [ngModelOptions]="{standalone: true}"
                             (change)="capturarRol($event)" class="" name="select">
                             <option value="1">Admin</option>
-                            <option value="2">Veterinario</option>
-                            <option value="4" selected>Dueño</option>
+                            <option value="2">Veterinarian</option>
+                            <option value="4" selected>Owner</option>
                         </select>
                         @if (form.get('IdRol')?.hasError('required') && form.get('IdRol')?.touched) {
                         <span>*Required field*</span>
@@ -75,6 +77,69 @@
                     <button class="btn" type="submit" id="save"><fa-icon [icon]="guardar"></fa-icon> save </button>
                 </div>
             </form>
+            }@else {
+            <form [formGroup]="form2" id="form" action="/login" method="post" (ngSubmit)="CUPersona()">
+                <div class="inputs">
+                    <div class="group">
+                        <label for="cedula" class="form-input">Id number:</label>
+                        @if (isEditable) {
+                        <input formControlName="cedula" type="number" id="cedula" class="form-input"
+                            placeholder="put your id " required>
+                        } @else {
+                        <input formControlName="cedula" type="number" id="cedula" class="form-input"
+                            placeholder="put your id " required readonly>
+                        }
+                        @if (form.get('cedula')?.hasError('required') && form.get('cedula')?.touched) {
+                        <span>*Required field*</span>
+                        }
+                        <label for="1ernombre" class="form-input">First Name:</label>
+                        <input formControlName="Primer_nombre" type="text" id="1ernombre" class="form-input"
+                            placeholder="put your first name " required>
+                        @if (form.get('Primer_nombre')?.hasError('required') && form.get('Primer_nombre')?.touched) {
+                        <span>*Required field*</span>
+                        }
+                        <label for="2donombre" class="form-input">Second Name (optional) :</label>
+                        <input formControlName="Segundo_nombre" type="text" id="2donombre" class="form-input"
+                            placeholder="put your second name " required>
+                        <label for="1erapellido" class="form-input">First Lastname:</label>
+                        <input formControlName="Primer_Apellido" type="text" id="1erapellido" class="form-input"
+                            placeholder="put your first  lastname " required>
+                        @if (form.get('Primer_Apellido')?.hasError('required') && form.get('Primer_Apellido')?.touched)
+                        {
+                        <span>*Required field*</span>
+                        }
+                    </div>
+                    <div class="group">
+                        <label for="2doapellido" class="form-input">Scond Lastname:</label>
+                        <input formControlName="Segundo_Apellido" type="text" id="2doapellido" class="form-input"
+                            placeholder="put your second  lastname " required>
+                        @if (form.get('Segundo_Apellido')?.hasError('required') &&
+                        form.get('Segundo_Apellido')?.touched) {
+                        <span>*Required field*</span>
+                        }
+
+
+                        <label for="rol" class="form-input">Role:</label>
+                        <select [(ngModel)]="rolSeleccionado" [ngModelOptions]="{standalone: true}"
+                            (change)="capturarRol($event)" class="" name="select">
+                            <option value="1">Admin</option>
+                            <option value="2">Veterinarian</option>
+                            <option value="4" selected>Owner</option>
+                        </select>
+                        @if (form.get('IdRol')?.hasError('required') && form.get('IdRol')?.touched) {
+                        <span>*Required field*</span>
+                        }
+                    </div>
+                </div>
+                <div class="botones">
+                    <button class="btn" id="cancel" (click)="volver()"><fa-icon [icon]="cancelar"></fa-icon> cancel
+                    </button>
+                    <button class="btn" type="submit" id="save"><fa-icon [icon]="guardar"></fa-icon> save </button>
+                </div>
+            </form>
+
+            }
+
         </div>
     </article>
 </section>
