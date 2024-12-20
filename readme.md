@@ -1,5 +1,5 @@
 # VETERINARYECOPET
-gi
+
 ## Description
  The Veterinary Care Platform is a web-based solution designed to improve the management and delivery of veterinary services. This platform enhances the relationship between veterinary clinics, pet owners, and veterinary staff by streamlining appointment scheduling, service management, and pet health tracking. It aims to foster better communication, convenience, and access to critical pet care services, making it easier for both pet owners and clinics to manage their pets' health.
 
@@ -163,9 +163,7 @@ Database
 # Contributors
 
 - Emmanuel Bolivar Marin
-- Maria Jose Arcila Cano
-- David Correa Posada
-- Manuela Diaz Arboleda 
+
 
 # Contact
 
